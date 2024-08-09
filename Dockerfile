@@ -10,8 +10,10 @@ RUN dpkg --add-architecture arm64 && \
   && apt-get -y install \
     build-essential \
 	scons \
+    sudo \
 	crossbuild-essential-arm64 \
 	libsdl1.2-dev:arm64 \
+	libsdl-ttf2.0-dev:arm64 \
 	libsdl2-dev:arm64 \
 	libsdl2-image-dev:arm64 \
 	libsdl2-mixer-dev:arm64 \
@@ -27,7 +29,7 @@ RUN dpkg --add-architecture arm64 && \
 
 #	and libgles-dev:arm64 someday
 
-RUN mkdir -p /root/workspace; ln -s /usr/local/include /usr/include/sdkdir
+RUN mkdir -p /workspace; chmod +0777 /workspace; ln -s /usr/local/include /usr/include/sdkdir
 WORKDIR /root
 
 # COPY my283/include /usr/local/include/
@@ -38,8 +40,8 @@ COPY freetype-config /usr/bin/freetype-config
 COPY setup-env.sh .
 RUN cat setup-env.sh >> .bashrc
 
-VOLUME /root/workspace
-WORKDIR /root/workspace
+VOLUME /workspace
+WORKDIR /workspace
 
 ENV CROSS_COMPILE=/usr/bin/aarch64-linux-gnu-
 ENV PREFIX=/usr
