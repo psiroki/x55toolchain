@@ -5,7 +5,11 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=Europe/Budapest
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN dpkg --add-architecture arm64 && \
+RUN echo 'deb http://archive.debian.org/debian buster main contrib non-free' > /etc/apt/sources.list && \
+    echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free' >> /etc/apt/sources.list && \
+    echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free' >> /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until && \
+  dpkg --add-architecture arm64 && \
   apt-get -y update  \
   && apt-get -y install \
     build-essential \
